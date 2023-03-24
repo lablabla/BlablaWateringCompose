@@ -1,0 +1,16 @@
+<resources>
+    <color name="mcgpalette0_50">#edf6fe</color>
+    <color name="mcgpalette0_100">#d1e8fc</color>
+    <color name="mcgpalette0_200">#b2d8fb</color>
+    <color name="mcgpalette0_300">#93c8f9</color>
+    <color name="mcgpalette0_400">#7cbdf7</color>
+    <color name="mcgpalette0_500">#65b1f6</color>
+    <color name="mcgpalette0_600">#5daaf5</color>
+    <color name="mcgpalette0_700">#53a1f3</color>
+    <color name="mcgpalette0_800">#4998f2</color>
+    <color name="mcgpalette0_900">#3788ef</color>
+    <color name="mcgpalette0_A100">#ffffff</color>
+    <color name="mcgpalette0_A200">#ffffff</color>
+    <color name="mcgpalette0_A400">#d2e5ff</color>
+    <color name="mcgpalette0_A700">#b8d6ff</color>
+</resources>
