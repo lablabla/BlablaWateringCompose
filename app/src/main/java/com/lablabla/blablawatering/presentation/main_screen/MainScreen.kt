@@ -3,24 +3,27 @@ package com.lablabla.blablawatering.presentation.main_screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lablabla.blablawatering.domain.model.Device
-import com.lablabla.blablawatering.domain.model.Station
+import androidx.compose.ui.Alignment.Companion.Center
+import com.lablabla.blablawatering.presentation.navigation_bar.WateringNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@WateringNavGraph(start = true)
+@Destination
 @Composable
-@Destination(start = true)
 fun MainScreen(
     navigator: DestinationsNavigator,
-    //viewModel: CompanyListingsViewModel = hiltViewModel()
+    viewModel: MainScreenViewModel = hiltViewModel()
     ) {
+
+    val state = viewModel.state.collectAsState()
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -39,15 +42,25 @@ fun MainScreen(
                 .padding(16.dp)
                 .background(MaterialTheme.colors.primary),
         ) {
-            items(10) { i->
-                StationItem(station = Station(id = i, state = (i%2 == 0), gpio=0, name = "Name $i"))
-                if (i < 10) {
+            items(state.value.stations.size) { i->
+                StationItem(station = state.value.stations[i])
+                if (i < state.value.stations.size) {
                     Divider(
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colors.onPrimary
                     )
                 }
             }
+        }
+    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Center
+    ) {
+        if(state.value.isLoading) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colors.onPrimary
+            )
         }
     }
 }

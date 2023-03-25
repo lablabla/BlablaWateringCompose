@@ -11,5 +11,5 @@ interface RemoteApi {
 
     suspend fun getWateringEvents(): List<WateringEvent>
 
-    suspend fun setWateringEvents(wateringEvent: List<WateringEvent>)
+    suspend fun setWateringEvents(wateringEvents: List<WateringEvent>)
 }

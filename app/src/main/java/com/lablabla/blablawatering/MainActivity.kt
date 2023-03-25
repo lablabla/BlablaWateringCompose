@@ -3,36 +3,42 @@ package com.lablabla.blablawatering
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.lablabla.blablawatering.domain.model.Device
-import com.lablabla.blablawatering.presentation.main_screen.DeviceItem
-import com.lablabla.blablawatering.presentation.main_screen.NavGraphs
+import androidx.navigation.compose.rememberNavController
+import com.lablabla.blablawatering.presentation.NavGraphs
+//import com.lablabla.blablawatering.presentation.main_screen.NavGraphs
+import com.lablabla.blablawatering.presentation.navigation_bar.BottomNavItem
+import com.lablabla.blablawatering.presentation.navigation_bar.BottomNavigationBar
 import com.lablabla.blablawatering.ui.theme.BlablaWateringTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             BlablaWateringTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
-                Surface(
+                Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    bottomBar = {
+                        BottomNavigationBar(navController)
+                    }
                 ) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    DestinationsNavHost(
+                        navController = navController,
+                        navGraph = NavGraphs.watering
+                    )
                 }
             }
         }

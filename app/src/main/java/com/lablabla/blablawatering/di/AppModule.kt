@@ -3,6 +3,7 @@ package com.lablabla.blablawatering.di
 import android.app.Application
 import androidx.room.Room
 import com.lablabla.blablawatering.data.local.WateringDatabase
+import com.lablabla.blablawatering.data.remote.MockRemoteApiImpl
 import com.lablabla.blablawatering.data.remote.RemoteApiBTImpl
 import com.lablabla.blablawatering.data.repository.WateringRepositoryImpl
 import com.lablabla.blablawatering.domain.repository.RemoteApi
@@ -20,7 +21,7 @@ object AppModule {
     @Provides
     @Singleton
     fun providesRemoteApi(): RemoteApi {
-        return RemoteApiBTImpl()
+        return MockRemoteApiImpl()
     }
 
     @Provides

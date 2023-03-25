@@ -60,7 +60,22 @@ class WateringRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setStations(setInRemote: Boolean, stations: List<Station>): Flow<Resource<Void>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.Loading(true))
+            stationsDao.clearStation()
+            stationsDao.insertStations(
+                stations.map { it.toStationEntity()}
+            )
+            if (setInRemote) {
+                try {
+                    api.setStations(stations)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    emit(Resource.Error(e.message.toString()))
+                }
+            }
+            emit(Resource.Loading(false))
+        }
     }
 
     override suspend fun getWateringEvents(getFromRemote: Boolean): Flow<Resource<List<WateringEvent>>> {
@@ -98,7 +113,22 @@ class WateringRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setWateringEvents(setInRemote: Boolean, wateringEvent: List<WateringEvent>): Flow<Resource<Boolean>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.Loading(true))
+            wateringEventsDao.clearWateringEvent()
+            wateringEventsDao.insertWateringEvents(
+                wateringEvent.map { it.toWateringEventEntity()}
+            )
+            if (setInRemote) {
+                try {
+                    api.setWateringEvents(wateringEvent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    emit(Resource.Error(e.message.toString()))
+                }
+            }
+            emit(Resource.Loading(false))
+        }
     }
 
 }
