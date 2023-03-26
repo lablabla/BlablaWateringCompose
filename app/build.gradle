@@ -104,4 +104,10 @@ dependencies {
 
     // Bluetooth
     implementation "com.github.weliem:blessed-android-coroutines:0.3.2"
+
+    // Timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Accompanist
+    implementation "com.google.accompanist:accompanist-permissions:0.23.1"
 }

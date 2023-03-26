@@ -20,11 +20,13 @@ import com.lablabla.blablawatering.presentation.navigation_bar.BottomNavigationB
 import com.lablabla.blablawatering.ui.theme.BlablaWateringTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
         setContent {
             BlablaWateringTheme {
                 val navController = rememberNavController()

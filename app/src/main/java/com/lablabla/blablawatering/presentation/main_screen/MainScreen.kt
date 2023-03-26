@@ -5,24 +5,29 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.lablabla.blablawatering.domain.model.Device
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
+import com.lablabla.blablawatering.domain.model.Device
 import com.lablabla.blablawatering.presentation.navigation_bar.WateringNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @WateringNavGraph(start = true)
 @Destination
 @Composable
 fun MainScreen(
-    navigator: DestinationsNavigator,
     viewModel: MainScreenViewModel = hiltViewModel()
     ) {
-
+    checkPermissions()
     val state = viewModel.state.collectAsState()
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -33,7 +38,13 @@ fun MainScreen(
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            DeviceItem(device = Device("Dummy", "0xdummy_address"))
+            state.value.device?.let {
+                DeviceItem(device = it)
+            } ?: Text(
+                text = "Not connected to device",
+                fontSize = 12.sp,
+                color = MaterialTheme.colors.onPrimary
+            )
         }
         Divider(modifier = Modifier.height(16.dp))
         LazyColumn(
@@ -63,4 +74,28 @@ fun MainScreen(
             )
         }
     }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun checkPermissions() {
+    val locationPermissionsState = rememberPermissionState(
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    )
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(
+        key1 = lifecycleOwner,
+        effect = {
+            val observer = LifecycleEventObserver { _, event ->
+                if(event == Lifecycle.Event.ON_START) {
+                    locationPermissionsState.launchPermissionRequest()
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+    )
 }

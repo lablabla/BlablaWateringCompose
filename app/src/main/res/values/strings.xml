@@ -5,4 +5,10 @@
     <string name="home">Home</string>
     <string name="stations">Stations</string>
     <string name="events">Events</string>
+
+    <string name="location_permission_header">Request Location Permission</string>
+    <string name="location_permission_rationale">
+        "Location is needed for BT to be able to scan for the watering system
+        without it, the application wouldn't be able to connect to the device"</string>
+    <string name="location_permission_request_text">Location is needed for BT to be able to scan for the watering system.</string>
 </resources>
