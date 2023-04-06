@@ -1,5 +1,6 @@
 package com.lablabla.blablawatering.data.remote
 
+import com.lablabla.blablawatering.domain.model.RemoteCommands
 import com.lablabla.blablawatering.domain.model.Station
 import com.lablabla.blablawatering.domain.model.WateringEvent
 import com.lablabla.blablawatering.domain.repository.BluetoothService
@@ -9,17 +10,14 @@ import javax.inject.Singleton
 
 @Singleton
 class RemoteApiBTImpl @Inject constructor(
-    bluetoothService: BluetoothService
+    private val bluetoothService: BluetoothService
 ): RemoteApi {
     private var stations: MutableList<Station> = mutableListOf()
 
     private var wateringEvents: List<WateringEvent> = emptyList()
 
-    init {
-//        bluetoothService.scanBleDevices()
-    }
-
     override suspend fun getStations(): List<Station> {
+        bluetoothService.sendCommand(RemoteCommands.GetStations)
         return stations
     }
 

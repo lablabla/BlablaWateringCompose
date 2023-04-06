@@ -5,6 +5,7 @@
     <string name="home">Home</string>
     <string name="stations">Stations</string>
     <string name="events">Events</string>
+    <string name="not_connected">Not connected to device</string>
 
     <string name="location_permission_header">Request Location Permission</string>
     <string name="location_permission_rationale">

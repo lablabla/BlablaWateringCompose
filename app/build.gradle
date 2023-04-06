@@ -73,7 +73,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
 
     // Compose dependencies
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
@@ -110,4 +110,8 @@ dependencies {
 
     // Accompanist
     implementation "com.google.accompanist:accompanist-permissions:0.23.1"
+
+    // Moshi
+    implementation "com.squareup.moshi:moshi:1.14.0"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.14.0'
 }

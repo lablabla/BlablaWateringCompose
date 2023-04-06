@@ -1,6 +1,7 @@
 package com.lablabla.blablawatering.data.mapper
 
 import com.lablabla.blablawatering.data.local.StationEntity
+import com.lablabla.blablawatering.data.local.StationsMoshi
 import com.lablabla.blablawatering.domain.model.Station
 
 fun StationEntity.toStation(): Station {
@@ -16,5 +17,14 @@ fun Station.toStationEntity(): StationEntity {
         id = id,
         name = name,
         gpio = gpio
+    )
+}
+
+fun StationsMoshi.toStation(): Station {
+    return Station(
+        id = id,
+        name = name,
+        gpio = gpio,
+        state = state
     )
 }

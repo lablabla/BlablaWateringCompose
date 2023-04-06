@@ -4,11 +4,12 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.lablabla.blablawatering.data.local.WateringDatabase
-import com.lablabla.blablawatering.data.remote.MockRemoteApiImpl
 import com.lablabla.blablawatering.data.remote.RemoteApiBTImpl
 import com.lablabla.blablawatering.data.repository.BluetoothServiceImpl
+import com.lablabla.blablawatering.data.repository.JSONHandlerMoshiImpl
 import com.lablabla.blablawatering.data.repository.WateringRepositoryImpl
 import com.lablabla.blablawatering.domain.repository.BluetoothService
+import com.lablabla.blablawatering.domain.repository.JSONHandler
 import com.lablabla.blablawatering.domain.repository.RemoteApi
 import com.lablabla.blablawatering.domain.repository.WateringRepository
 import com.welie.blessed.BluetoothCentralManager
@@ -25,6 +26,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun providesJsonHandler(): JSONHandler {
+        return JSONHandlerMoshiImpl()
+    }
+
+    @Provides
+    @Singleton
     fun providesBluetoothCentralManager(@ApplicationContext context: Context): BluetoothCentralManager {
         return BluetoothCentralManager(context)
     }
@@ -37,8 +44,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesBluetoothService(central: BluetoothCentralManager): BluetoothService {
-        return BluetoothServiceImpl(central)
+    fun providesBluetoothService(
+        central: BluetoothCentralManager,
+        jsonHandler: JSONHandler
+    ): BluetoothService {
+        return BluetoothServiceImpl(central, jsonHandler)
     }
 
     @Provides

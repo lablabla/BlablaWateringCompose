@@ -36,15 +36,10 @@ fun MainScreen(
             backgroundColor = MaterialTheme.colors.primary,
             elevation = 10.dp,
             modifier = Modifier
+                .height(120.dp)
                 .padding(16.dp)
         ) {
-            state.value.device?.let {
-                DeviceItem(device = it)
-            } ?: Text(
-                text = "Not connected to device",
-                fontSize = 12.sp,
-                color = MaterialTheme.colors.onPrimary
-            )
+            DeviceItem(device = state.value.device)
         }
         Divider(modifier = Modifier.height(16.dp))
         LazyColumn(

@@ -2,6 +2,7 @@ package com.lablabla.blablawatering.presentation.main_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lablabla.blablawatering.domain.model.Station
 import com.lablabla.blablawatering.domain.repository.BluetoothService
 import com.lablabla.blablawatering.domain.repository.WateringRepository
 import com.lablabla.blablawatering.util.Resource
@@ -25,8 +26,15 @@ class MainScreenViewModel @Inject constructor(
     init {
         bluetoothService.addOnDeviceConnected { device, isConnected ->
             Timber.i("OnDeviceConnected called with device ${device.name}, isConnected = $isConnected")
+            val deviceToUpdate = if (isConnected) { device } else { null }
             _state.update {
-                it.copy(device = device)
+                it.copy(device = deviceToUpdate)
+            }
+        }
+        bluetoothService.addOnStationsChanged { device, stations ->
+            Timber.i("OnStationChanged called with device ${device.name}")
+            _state.update {
+                it.copy(stations = stations)
             }
         }
         if (state.value.device == null) {

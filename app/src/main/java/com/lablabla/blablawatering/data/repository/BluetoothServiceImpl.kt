@@ -3,18 +3,15 @@ package com.lablabla.blablawatering.data.repository
 import com.lablabla.blablawatering.data.mapper.toBluetoothDevice
 import com.lablabla.blablawatering.domain.model.Device
 import com.lablabla.blablawatering.domain.model.RemoteCommands
+import com.lablabla.blablawatering.domain.model.Station
 import com.lablabla.blablawatering.domain.repository.BluetoothService
-import com.lablabla.blablawatering.util.Resource
-import com.welie.blessed.BluetoothCentralManager
-import com.welie.blessed.ConnectionFailedException
-import com.welie.blessed.ConnectionState
+import com.lablabla.blablawatering.domain.repository.JSONHandler
+import com.welie.blessed.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
@@ -23,7 +20,8 @@ import javax.inject.Singleton
 
 @Singleton
 class BluetoothServiceImpl @Inject constructor(
-    private val central: BluetoothCentralManager
+    private val central: BluetoothCentralManager,
+    private val jsonHandler: JSONHandler
 ) : BluetoothService {
 
     private val connectionState = MutableStateFlow(ConnectionState.DISCONNECTED)
@@ -32,6 +30,10 @@ class BluetoothServiceImpl @Inject constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private var connectionCallback: ((Device, Boolean) -> Unit)? = null
+
+    private var notificationCallback: ((Device, List<Station>) -> Unit)? = null
+
+    private var _peripheral: BluetoothPeripheral? = null
 
     // Services & Characteristics
     private val SERVICE_UUID =                          UUID.fromString("0000abcd-6e32-4f94-adf6-b96ebda4c6ce")
@@ -45,6 +47,31 @@ class BluetoothServiceImpl @Inject constructor(
         central.observeConnectionState { peripheral, state ->
             Timber.i("Peripheral ${peripheral.name} has $state")
             connectionCallback?.invoke(peripheral.toBluetoothDevice(), state == ConnectionState.CONNECTED)
+            if (state == ConnectionState.DISCONNECTED) {
+                scanBleDevices()
+            }
+            else if (state == ConnectionState.CONNECTED) {
+                _peripheral = peripheral
+            }
+            scope.launch {
+                if (state == ConnectionState.CONNECTED) {
+                    val newMtu = peripheral.requestMtu(BluetoothPeripheral.MAX_MTU)
+                    Timber.i("New MTU set to $newMtu")
+                }
+                peripheral.getCharacteristic(SERVICE_UUID, NOTIFY_STATION_STATUS_CHANGED_UUID)
+                    ?.let {
+                        peripheral.observe(it) { value ->
+                            val json = value.asString()
+                            Timber.i(json)
+                            jsonHandler.parseStations(json)?.let { stations ->
+//                                notificationCallback?.invoke(
+//                                    peripheral.toBluetoothDevice(),
+//                                    stations
+//                                )
+                            }
+                        }
+                    }
+            }
         }
     }
 
@@ -80,7 +107,26 @@ class BluetoothServiceImpl @Inject constructor(
         connectionCallback = callback
     }
 
-    override suspend fun sendCommand(device: Device, commands: RemoteCommands, data: ByteArray?) {
-        TODO("Not yet implemented")
+    override fun addOnStationsChanged(callback: (Device, List<Station>) -> Unit) {
+        notificationCallback = callback
+    }
+
+    override suspend fun sendCommand(commands: RemoteCommands, data: ByteArray?) {
+        _peripheral?.let {
+            getStations(it)
+        }
+    }
+
+    private suspend fun getStations(peripheral: BluetoothPeripheral) {
+        peripheral.getCharacteristic(SERVICE_UUID, GET_STATIONS_UUID)?.let {
+            val json = peripheral.readCharacteristic(it).asString()
+            Timber.i(json)
+            jsonHandler.parseStations(json)?.let { stations ->
+                notificationCallback?.invoke(
+                    peripheral.toBluetoothDevice(),
+                    stations
+                )
+            }
+        }
     }
 }
