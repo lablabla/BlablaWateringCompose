@@ -1,15 +1,19 @@
 package com.lablabla.blablawatering.data.local
 
 import androidx.room.TypeConverter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import java.lang.reflect.Type
 
 class WateringTypeConverters {
+
+    private val moshi = Moshi.Builder().build()
+    private val membersType = Types.newParameterizedType(List::class.java, StationEntity::class.java)
+    private val membersAdapter = moshi.adapter<List<StationEntity>>(membersType)
+
     @TypeConverter
-    fun fromListToString(list: List<*>): String {
-        val type = object: TypeToken<List<*>>() {}.type
-        return Gson().toJson(list, type)
+    fun fromListToString(list: List<StationEntity>): String {
+        return membersAdapter.toJson(list)
     }
 
     @TypeConverter
@@ -17,7 +21,6 @@ class WateringTypeConverters {
         if(dataString == null || dataString.isEmpty()) {
             return mutableListOf()
         }
-        val type: Type = object : TypeToken<List<StationEntity>>() {}.type
-        return Gson().fromJson(dataString, type)
+        return membersAdapter.fromJson(dataString).orEmpty()
     }
 }
