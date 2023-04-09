@@ -1,8 +1,7 @@
-package com.lablabla.blablawatering.presentation.stations_screen
+package com.lablabla.blablawatering.presentation.zones_screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,11 +14,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 @WateringNavGraph
 @Destination
 @Composable
-fun StationsScreen() {
+fun ZonesScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = stringResource(id = R.string.stations))
+        Text(text = stringResource(id = R.string.zones))
     }
 }

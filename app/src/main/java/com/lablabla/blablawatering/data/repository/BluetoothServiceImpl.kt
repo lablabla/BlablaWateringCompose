@@ -3,7 +3,7 @@ package com.lablabla.blablawatering.data.repository
 import com.lablabla.blablawatering.data.mapper.toBluetoothDevice
 import com.lablabla.blablawatering.domain.model.Device
 import com.lablabla.blablawatering.domain.model.RemoteCommands
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 import com.lablabla.blablawatering.domain.repository.BluetoothService
 import com.lablabla.blablawatering.domain.repository.JSONHandler
 import com.welie.blessed.*
@@ -31,7 +31,7 @@ class BluetoothServiceImpl @Inject constructor(
 
     private var connectionCallback: ((Device, Boolean) -> Unit)? = null
 
-    private var notificationCallback: ((Device, List<Station>) -> Unit)? = null
+    private var notificationCallback: ((Device, List<Zone>) -> Unit)? = null
 
     private var _peripheral: BluetoothPeripheral? = null
 
@@ -63,7 +63,7 @@ class BluetoothServiceImpl @Inject constructor(
                         peripheral.observe(it) { value ->
                             val json = value.asString()
                             Timber.i(json)
-                            jsonHandler.parseStations(json)?.let { stations ->
+                            jsonHandler.parseZones(json)?.let { stations ->
 //                                notificationCallback?.invoke(
 //                                    peripheral.toBluetoothDevice(),
 //                                    stations
@@ -107,7 +107,7 @@ class BluetoothServiceImpl @Inject constructor(
         connectionCallback = callback
     }
 
-    override fun addOnStationsChanged(callback: (Device, List<Station>) -> Unit) {
+    override fun addOnZonesChanged(callback: (Device, List<Zone>) -> Unit) {
         notificationCallback = callback
     }
 
@@ -121,7 +121,7 @@ class BluetoothServiceImpl @Inject constructor(
         peripheral.getCharacteristic(SERVICE_UUID, GET_STATIONS_UUID)?.let {
             val json = peripheral.readCharacteristic(it).asString()
             Timber.i(json)
-            jsonHandler.parseStations(json)?.let { stations ->
+            jsonHandler.parseZones(json)?.let { stations ->
                 notificationCallback?.invoke(
                     peripheral.toBluetoothDevice(),
                     stations

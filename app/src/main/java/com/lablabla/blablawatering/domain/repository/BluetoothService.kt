@@ -2,7 +2,7 @@ package com.lablabla.blablawatering.domain.repository
 
 import com.lablabla.blablawatering.domain.model.Device
 import com.lablabla.blablawatering.domain.model.RemoteCommands
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 
 interface BluetoothService {
 
@@ -14,7 +14,7 @@ interface BluetoothService {
 
     fun addOnDeviceConnected(callback: (Device, Boolean) -> Unit)
 
-    fun addOnStationsChanged(callback: (Device, List<Station>) -> Unit)
+    fun addOnZonesChanged(callback: (Device, List<Zone>) -> Unit)
 
     suspend fun sendCommand(commands: RemoteCommands, data: ByteArray? = null)
 }

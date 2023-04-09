@@ -7,7 +7,7 @@ fun WateringEventEntity.toWateringEvent(): WateringEvent {
     return WateringEvent(
         name = name,
         cron = cron,
-        stations = stations.map { it.toStation() }
+        zones = zones.map { it.toZone() }
     )
 }
 
@@ -15,6 +15,6 @@ fun WateringEvent.toWateringEventEntity(): WateringEventEntity {
     return WateringEventEntity(
         name = name,
         cron = cron,
-        stations = stations.map { it.toStationEntity() }
+        zones = zones.map { it.toZoneEntity() }
     )
 }

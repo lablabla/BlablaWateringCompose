@@ -1,13 +1,13 @@
 package com.lablabla.blablawatering.domain.repository
 
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 import com.lablabla.blablawatering.domain.model.WateringEvent
 
 interface RemoteApi {
 
-    suspend fun getStations(): List<Station>
+    suspend fun getZones(): List<Zone>
 
-    suspend fun setStations(stations: List<Station>)
+    suspend fun setZones(zones: List<Zone>)
 
     suspend fun getWateringEvents(): List<WateringEvent>
 

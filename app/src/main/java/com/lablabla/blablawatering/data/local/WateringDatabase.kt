@@ -5,11 +5,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [StationEntity::class, WateringEventEntity::class],
+    entities = [ZoneEntity::class, WateringEventEntity::class],
     version = 1
 )
 @TypeConverters(WateringTypeConverters::class)
 abstract class WateringDatabase: RoomDatabase() {
-    abstract val stationsDao: StationsDao
+    abstract val zoneDao: ZoneDao
     abstract val wateringEventsDao: WateringEventsDao
 }

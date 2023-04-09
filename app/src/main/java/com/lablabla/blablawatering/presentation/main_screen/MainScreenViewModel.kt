@@ -2,7 +2,6 @@ package com.lablabla.blablawatering.presentation.main_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lablabla.blablawatering.domain.model.Station
 import com.lablabla.blablawatering.domain.repository.BluetoothService
 import com.lablabla.blablawatering.domain.repository.WateringRepository
 import com.lablabla.blablawatering.util.Resource
@@ -31,27 +30,27 @@ class MainScreenViewModel @Inject constructor(
                 it.copy(device = deviceToUpdate)
             }
         }
-        bluetoothService.addOnStationsChanged { device, stations ->
-            Timber.i("OnStationChanged called with device ${device.name}")
+        bluetoothService.addOnZonesChanged { device, zones ->
+            Timber.i("OnZonesChanged called with device ${device.name}")
             _state.update {
-                it.copy(stations = stations)
+                it.copy(zones = zones)
             }
         }
         if (state.value.device == null) {
             bluetoothService.scanBleDevices()
         }
-        getStations()
+        getZones()
     }
 
-    private fun getStations(fetchFromRemote: Boolean = false) {
+    private fun getZones(fetchFromRemote: Boolean = false) {
         viewModelScope.launch {
-            repository.getStations(fetchFromRemote)
+            repository.getZones(fetchFromRemote)
                 .collect { result ->
                     when(result) {
                         is Resource.Success -> {
-                            result.data?.let { stations ->
+                            result.data?.let { zones ->
                                 _state.update {
-                                    it.copy(stations = stations)
+                                    it.copy(zones = zones)
                                 }
                             }
                         }

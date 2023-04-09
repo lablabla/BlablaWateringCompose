@@ -3,7 +3,7 @@
     <string name="device">Device</string>
     <string name="address">Address</string>
     <string name="home">Home</string>
-    <string name="stations">Stations</string>
+    <string name="zones">Zones</string>
     <string name="events">Events</string>
     <string name="not_connected">Not connected to device</string>
 

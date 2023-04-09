@@ -1,11 +1,11 @@
 package com.lablabla.blablawatering.data.repository
 
 import com.lablabla.blablawatering.data.local.WateringDatabase
-import com.lablabla.blablawatering.data.mapper.toStation
-import com.lablabla.blablawatering.data.mapper.toStationEntity
+import com.lablabla.blablawatering.data.mapper.toZone
+import com.lablabla.blablawatering.data.mapper.toZoneEntity
 import com.lablabla.blablawatering.data.mapper.toWateringEvent
 import com.lablabla.blablawatering.data.mapper.toWateringEventEntity
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 import com.lablabla.blablawatering.domain.model.WateringEvent
 import com.lablabla.blablawatering.domain.repository.RemoteApi
 import com.lablabla.blablawatering.domain.repository.WateringRepository
@@ -21,54 +21,54 @@ class WateringRepositoryImpl @Inject constructor(
     db: WateringDatabase
 ): WateringRepository {
 
-    private val stationsDao = db.stationsDao
+    private val zonesDao = db.zoneDao
 
     private val wateringEventsDao = db.wateringEventsDao
 
-    override suspend fun getStations(getFromRemote: Boolean): Flow<Resource<List<Station>>> {
+    override suspend fun getZones(getFromRemote: Boolean): Flow<Resource<List<Zone>>> {
         return flow {
             emit(Resource.Loading(true))
-            val localStations = stationsDao.getStations()
+            val localZones = zonesDao.getZones()
             emit(Resource.Success(
-                data = localStations.map { it.toStation() }
+                data = localZones.map { it.toZone() }
             ))
-            val isDbEmpty = localStations.isEmpty()
+            val isDbEmpty = localZones.isEmpty()
             val loadFromCache = !isDbEmpty && !getFromRemote
             if (loadFromCache) {
                 emit(Resource.Loading(false))
                 return@flow
             }
-            val remoteStations = try {
-                 api.getStations()
+            val remoteZones = try {
+                 api.getZones()
             } catch (e: Exception) {
                 e.printStackTrace()
                 emit(Resource.Error(e.message.toString()))
                 null
             }
 
-            remoteStations?.let { stations ->
-                stationsDao.clearStation()
-                stationsDao.insertStations(
-                    stations.map { it.toStationEntity()}
+            remoteZones?.let { zones ->
+                zonesDao.clearZones()
+                zonesDao.insertZones(
+                    zones.map { it.toZoneEntity()}
                 )
                 emit(Resource.Success(
-                    data = stationsDao.getStations().map { it.toStation() }
+                    data = zonesDao.getZones().map { it.toZone() }
                 ))
                 emit(Resource.Loading(false))
             }
         }
     }
 
-    override suspend fun setStations(setInRemote: Boolean, stations: List<Station>): Flow<Resource<Void>> {
+    override suspend fun setZones(setInRemote: Boolean, zones: List<Zone>): Flow<Resource<Void>> {
         return flow {
             emit(Resource.Loading(true))
-            stationsDao.clearStation()
-            stationsDao.insertStations(
-                stations.map { it.toStationEntity()}
+            zonesDao.clearZones()
+            zonesDao.insertZones(
+                zones.map { it.toZoneEntity()}
             )
             if (setInRemote) {
                 try {
-                    api.setStations(stations)
+                    api.setZones(zones)
                 } catch (e: Exception) {
                     e.printStackTrace()
                     emit(Resource.Error(e.message.toString()))
@@ -99,10 +99,10 @@ class WateringRepositoryImpl @Inject constructor(
                 null
             }
 
-            remoteEvents?.let { stations ->
+            remoteEvents?.let { zones ->
                 wateringEventsDao.clearWateringEvent()
                 wateringEventsDao.insertWateringEvents(
-                    stations.map { it.toWateringEventEntity()}
+                    zones.map { it.toWateringEventEntity()}
                 )
                 emit(Resource.Success(
                     data = wateringEventsDao.getWateringEvents().map { it.toWateringEvent() }

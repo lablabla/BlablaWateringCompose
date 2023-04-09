@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class WateringEventEntity(
     val name: String,
     val cron: String,
-    val stations: List<StationEntity>,
+    val zones: List<ZoneEntity>,
     @PrimaryKey val id: Int? = null
 )

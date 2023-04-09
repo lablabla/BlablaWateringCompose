@@ -10,7 +10,7 @@ import com.lablabla.blablawatering.R
 import com.lablabla.blablawatering.presentation.destinations.DirectionDestination
 import com.lablabla.blablawatering.presentation.destinations.EventsScreenDestination
 import com.lablabla.blablawatering.presentation.destinations.MainScreenDestination
-import com.lablabla.blablawatering.presentation.destinations.StationsScreenDestination
+import com.lablabla.blablawatering.presentation.destinations.ZonesScreenDestination
 
 enum class BottomBarDestination(
     val direction: DirectionDestination,
@@ -18,6 +18,6 @@ enum class BottomBarDestination(
     @StringRes val label: Int
 ) {
     Home(MainScreenDestination, Icons.Default.Home, R.string.home),
-    Stations(StationsScreenDestination, Icons.Default.Settings, R.string.stations),
+    Zones(ZonesScreenDestination, Icons.Default.Settings, R.string.zones),
     Events(EventsScreenDestination, Icons.Default.Schedule, R.string.events)
 }

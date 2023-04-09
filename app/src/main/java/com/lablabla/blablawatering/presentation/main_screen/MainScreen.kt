@@ -11,13 +11,11 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import com.lablabla.blablawatering.domain.model.Device
 import com.lablabla.blablawatering.presentation.navigation_bar.WateringNavGraph
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -48,9 +46,9 @@ fun MainScreen(
                 .padding(16.dp)
                 .background(MaterialTheme.colors.primary),
         ) {
-            items(state.value.stations.size) { i->
-                StationItem(station = state.value.stations[i])
-                if (i < state.value.stations.size) {
+            items(state.value.zones.size) { i->
+                ZoneItem(zone = state.value.zones[i])
+                if (i < state.value.zones.size) {
                     Divider(
                         modifier = Modifier.padding(16.dp),
                         color = MaterialTheme.colors.onPrimary

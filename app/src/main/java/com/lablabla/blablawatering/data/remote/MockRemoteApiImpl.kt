@@ -1,6 +1,6 @@
 package com.lablabla.blablawatering.data.remote
 
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 import com.lablabla.blablawatering.domain.model.WateringEvent
 import com.lablabla.blablawatering.domain.repository.RemoteApi
 import javax.inject.Inject
@@ -8,22 +8,22 @@ import javax.inject.Singleton
 
 @Singleton
 class MockRemoteApiImpl @Inject constructor() : RemoteApi {
-    private var stations: MutableList<Station> = mutableListOf()
+    private var zones: MutableList<Zone> = mutableListOf()
 
     private var wateringEvents: List<WateringEvent> = emptyList()
 
     init {
-        stations.add(Station(0, "Test station 1", 1, false))
-        stations.add(Station(1, "Test station 2", 2, false))
-        stations.add(Station(2, "Test station 3", 3, false))
+        zones.add(Zone(0, "Test zone 1", 1, false))
+        zones.add(Zone(1, "Test zone 2", 2, false))
+        zones.add(Zone(2, "Test zone 3", 3, false))
     }
 
-    override suspend fun getStations(): List<Station> {
-        return stations
+    override suspend fun getZones(): List<Zone> {
+        return zones
     }
 
-    override suspend fun setStations(stations: List<Station>) {
-        this.stations = stations as MutableList<Station>
+    override suspend fun setZones(zones: List<Zone>) {
+        this.zones = zones as MutableList<Zone>
     }
 
     override suspend fun getWateringEvents(): List<WateringEvent> {

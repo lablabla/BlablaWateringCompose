@@ -1,7 +1,7 @@
 package com.lablabla.blablawatering.data.remote
 
 import com.lablabla.blablawatering.domain.model.RemoteCommands
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 import com.lablabla.blablawatering.domain.model.WateringEvent
 import com.lablabla.blablawatering.domain.repository.BluetoothService
 import com.lablabla.blablawatering.domain.repository.RemoteApi
@@ -12,17 +12,17 @@ import javax.inject.Singleton
 class RemoteApiBTImpl @Inject constructor(
     private val bluetoothService: BluetoothService
 ): RemoteApi {
-    private var stations: MutableList<Station> = mutableListOf()
+    private var zones: MutableList<Zone> = mutableListOf()
 
     private var wateringEvents: List<WateringEvent> = emptyList()
 
-    override suspend fun getStations(): List<Station> {
-        bluetoothService.sendCommand(RemoteCommands.GetStations)
-        return stations
+    override suspend fun getZones(): List<Zone> {
+        bluetoothService.sendCommand(RemoteCommands.GetZones)
+        return zones
     }
 
-    override suspend fun setStations(stations: List<Station>) {
-        this.stations = stations as MutableList<Station>
+    override suspend fun setZones(zones: List<Zone>) {
+        this.zones = zones as MutableList<Zone>
     }
 
     override suspend fun getWateringEvents(): List<WateringEvent> {

@@ -11,21 +11,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 
 @Composable
-fun StationItem(
-    station: Station,
+fun ZoneItem(
+    zone: Zone,
     modifier: Modifier = Modifier
 ) {
-    val backroundColor = if (station.state) Color.Green else Color.Red
+    val backroundColor = if (zone.state) Color.Green else Color.Red
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
     ) {
         Text(
-            text = station.name,
+            text = zone.name,
             color = MaterialTheme.colors.onPrimary
         )
         Spacer(modifier = modifier.height(8.dp))

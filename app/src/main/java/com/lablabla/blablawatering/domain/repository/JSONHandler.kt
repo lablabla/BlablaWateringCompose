@@ -1,11 +1,11 @@
 package com.lablabla.blablawatering.domain.repository
 
-import com.lablabla.blablawatering.domain.model.Station
+import com.lablabla.blablawatering.domain.model.Zone
 
 interface JSONHandler {
-    fun parseStations(jsonString: String) : List<Station>?
+    fun parseZones(jsonString: String) : List<Zone>?
 
-    fun stringifyStations(stations: List<Station>): String
+    fun stringifyZones(zones: List<Zone>): String
 
     // TODO: Add parseEvents
 }
